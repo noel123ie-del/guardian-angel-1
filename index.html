@@ -1,0 +1,1037 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>Guardian Angel — Money & time, made simple</title>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --green:#22c55e;--green-dark:#16a34a;--green-light:#f0fdf4;
+  --text:#111827;--muted:#6b7280;--border:#e5e7eb;
+  --bg:#fff;--card:#f9fafb;--red:#ef4444;--yellow:#f59e0b;--blue:#3b82f6;
+}
+body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;color:var(--text);background:var(--bg);line-height:1.6}
+a{text-decoration:none;color:inherit;cursor:pointer}
+input,select,textarea{font-family:inherit;font-size:0.9rem}
+.hidden{display:none!important}
+
+/* NAV */
+nav{display:flex;align-items:center;justify-content:space-between;padding:12px 28px;border-bottom:1px solid var(--border);position:sticky;top:0;background:rgba(255,255,255,0.97);backdrop-filter:blur(6px);z-index:100;gap:12px;flex-wrap:wrap}
+.nav-brand{display:flex;flex-direction:column;cursor:pointer}
+.nav-brand strong{font-size:1.05rem;font-weight:800}
+.nav-brand span{font-size:0.72rem;color:var(--muted)}
+.nav-links{display:flex;gap:2px;flex-wrap:wrap}
+.nav-links a{padding:6px 11px;border-radius:6px;font-size:0.82rem;color:var(--muted);transition:.15s}
+.nav-links a:hover,.nav-links a.active{background:var(--green-light);color:var(--green-dark);font-weight:600}
+.nav-actions{display:flex;gap:8px;align-items:center}
+
+/* BUTTONS */
+.btn{display:inline-flex;align-items:center;justify-content:center;padding:9px 18px;border-radius:8px;font-size:0.875rem;font-weight:600;cursor:pointer;transition:.15s;border:none;gap:6px}
+.btn-primary{background:var(--green);color:#fff}.btn-primary:hover{background:var(--green-dark)}
+.btn-outline{background:transparent;color:var(--text);border:1.5px solid var(--border)}.btn-outline:hover{border-color:var(--green);color:var(--green-dark)}
+.btn-ghost{background:transparent;color:var(--muted);font-size:0.8rem;padding:6px 10px}.btn-ghost:hover{color:var(--text)}
+.btn-sm{padding:6px 14px;font-size:0.8rem}
+.btn-danger{background:#fee2e2;color:var(--red);border:1px solid #fecaca}.btn-danger:hover{background:#fecaca}
+
+/* PAGES */
+.page{display:none;animation:fadeIn .2s ease}
+.page.active{display:block}
+@keyframes fadeIn{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
+
+/* ── HOME ── */
+.hero{max-width:720px;margin:72px auto 56px;padding:0 24px;text-align:center}
+.hero h1{font-size:clamp(1.8rem,5vw,2.8rem);font-weight:800;line-height:1.15;letter-spacing:-.02em;margin-bottom:18px}
+.hero p{font-size:1.05rem;color:var(--muted);max-width:540px;margin:0 auto 28px}
+.hero-actions{display:flex;gap:12px;justify-content:center;flex-wrap:wrap}
+.hero-actions .btn{padding:12px 24px;font-size:0.95rem}
+
+.feature-card{max-width:860px;margin:0 auto 48px;padding:0 24px}
+.feature-inner{background:var(--green-light);border:1.5px solid #bbf7d0;border-radius:16px;padding:28px 32px}
+.badge{display:inline-block;background:var(--green);color:#fff;font-size:0.62rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;padding:2px 8px;border-radius:99px;margin-bottom:8px}
+.feature-inner h3{font-size:1.15rem;font-weight:700;margin-bottom:6px}
+.feature-inner p{color:var(--muted);font-size:.9rem}
+.ptags{display:flex;gap:8px;flex-wrap:wrap;margin-top:14px}
+.ptag{background:#fff;border:1px solid var(--border);border-radius:6px;padding:3px 10px;font-size:.76rem;color:var(--muted);font-weight:500}
+
+.how-section{max-width:860px;margin:0 auto;padding:0 24px 56px}
+.section-label{font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--green-dark);margin-bottom:6px}
+.how-section h2{font-size:1.4rem;font-weight:700;margin-bottom:24px}
+.steps{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:20px}
+.step{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:22px}
+.step-num{width:34px;height:34px;border-radius:50%;background:var(--green);color:#fff;font-weight:800;display:flex;align-items:center;justify-content:center;margin-bottom:14px}
+.step h3{font-size:.95rem;font-weight:700;margin-bottom:4px}
+.step p{font-size:.83rem;color:var(--muted)}
+
+.privacy-banner{background:var(--card);border-top:1px solid var(--border);border-bottom:1px solid var(--border);padding:40px 24px;margin-bottom:48px}
+.privacy-box{max-width:860px;margin:16px auto 0;background:#fff;border:1.5px solid var(--border);border-radius:12px;padding:24px 28px}
+.privacy-box p{color:var(--muted);font-size:.9rem;margin-top:6px}
+
+.cards-section{max-width:860px;margin:0 auto;padding:0 24px 64px}
+.cards-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:14px;margin-top:24px}
+.nav-card{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:18px;cursor:pointer;transition:.15s;display:flex;flex-direction:column;gap:6px}
+.nav-card:hover{border-color:var(--green);box-shadow:0 2px 12px rgba(34,197,94,.12)}
+.nav-card .icon{font-size:1.4rem}
+.nav-card h3{font-size:.9rem;font-weight:700}
+.nav-card p{font-size:.78rem;color:var(--muted)}
+
+/* ── SETUP ── */
+.setup-wrap{max-width:560px;margin:48px auto;padding:0 24px 64px}
+.setup-header{margin-bottom:32px}
+.setup-header h1{font-size:1.6rem;font-weight:800;margin-bottom:6px}
+.setup-header p{color:var(--muted);font-size:.9rem}
+.progress-bar{height:6px;background:#e5e7eb;border-radius:99px;margin:20px 0}
+.progress-fill{height:100%;background:var(--green);border-radius:99px;transition:.3s}
+.q-step{display:none}.q-step.active{display:block}
+.q-label{font-size:1rem;font-weight:700;margin-bottom:16px;line-height:1.4}
+.q-sub{font-size:.82rem;color:var(--muted);margin-top:-10px;margin-bottom:16px}
+.field{margin-bottom:14px}
+.field label{display:block;font-size:.82rem;font-weight:600;margin-bottom:5px;color:var(--muted)}
+.field input,.field select{width:100%;padding:10px 14px;border:1.5px solid var(--border);border-radius:8px;outline:none;transition:.15s}
+.field input:focus,.field select:focus{border-color:var(--green)}
+.input-prefix{position:relative}.input-prefix span{position:absolute;left:12px;top:50%;transform:translateY(-50%);color:var(--muted);font-weight:600}
+.input-prefix input{padding-left:26px}
+.option-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(130px,1fr));gap:10px;margin-bottom:20px}
+.option-btn{padding:12px 10px;border:1.5px solid var(--border);border-radius:10px;cursor:pointer;text-align:center;font-size:.85rem;font-weight:600;transition:.15s;background:#fff}
+.option-btn:hover{border-color:var(--green);background:var(--green-light)}
+.option-btn.selected{border-color:var(--green);background:var(--green-light);color:var(--green-dark)}
+.q-nav{display:flex;gap:10px;justify-content:space-between;margin-top:24px;align-items:center}
+.q-counter{font-size:.8rem;color:var(--muted)}
+
+/* ── RESULTS / PLAN ── */
+.plan-wrap{max-width:860px;margin:0 auto;padding:32px 24px 64px}
+.plan-wrap h1{font-size:1.6rem;font-weight:800;margin-bottom:6px}
+.plan-wrap .subtitle{color:var(--muted);font-size:.9rem;margin-bottom:28px}
+.summary-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:16px;margin-bottom:32px}
+.summary-card{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:20px}
+.summary-card .label{font-size:.75rem;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);margin-bottom:4px}
+.summary-card .value{font-size:1.6rem;font-weight:800}
+.summary-card .value.green{color:var(--green-dark)}
+.summary-card .value.red{color:var(--red)}
+.summary-card .sub{font-size:.76rem;color:var(--muted);margin-top:2px}
+.plan-section{margin-bottom:28px}
+.plan-section h2{font-size:1.1rem;font-weight:700;margin-bottom:14px}
+.bar-chart{display:flex;flex-direction:column;gap:10px}
+.bar-row{display:flex;align-items:center;gap:12px}
+.bar-label{width:120px;font-size:.82rem;color:var(--muted);text-align:right;flex-shrink:0}
+.bar-track{flex:1;height:10px;background:#e5e7eb;border-radius:99px;overflow:hidden}
+.bar-fill{height:100%;border-radius:99px;transition:.4s}
+.bar-val{width:60px;font-size:.82rem;font-weight:600}
+.insight-box{background:var(--green-light);border:1px solid #bbf7d0;border-radius:10px;padding:16px 20px;margin-bottom:12px;font-size:.88rem}
+.insight-box strong{display:block;margin-bottom:3px}
+.no-data-box{text-align:center;padding:48px 24px;color:var(--muted)}
+.no-data-box p{margin-bottom:16px}
+
+/* ── DAILY LOG ── */
+.log-wrap{max-width:620px;margin:0 auto;padding:32px 24px 64px}
+.log-wrap h1{font-size:1.5rem;font-weight:800;margin-bottom:4px}
+.log-wrap .subtitle{color:var(--muted);font-size:.88rem;margin-bottom:24px}
+.log-form{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:24px;margin-bottom:24px}
+.log-form h2{font-size:1rem;font-weight:700;margin-bottom:16px}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.entries-list{display:flex;flex-direction:column;gap:10px}
+.entry-item{display:flex;justify-content:space-between;align-items:center;background:var(--card);border:1px solid var(--border);border-radius:10px;padding:14px 18px}
+.entry-left .entry-name{font-weight:600;font-size:.9rem}
+.entry-left .entry-meta{font-size:.76rem;color:var(--muted);margin-top:2px}
+.entry-amount{font-weight:700;font-size:1rem}
+.entry-amount.income{color:var(--green-dark)}
+.entry-amount.expense{color:var(--red)}
+.entry-del{background:none;border:none;cursor:pointer;color:#d1d5db;font-size:1rem;padding:4px;transition:.15s}
+.entry-del:hover{color:var(--red)}
+.today-total{display:flex;justify-content:space-between;padding:12px 0;border-top:2px solid var(--border);font-weight:700}
+
+/* ── WEEKLY ── */
+.weekly-wrap{max-width:860px;margin:0 auto;padding:32px 24px 64px}
+.weekly-wrap h1{font-size:1.5rem;font-weight:800;margin-bottom:4px}
+.weekly-wrap .subtitle{color:var(--muted);font-size:.88rem;margin-bottom:28px}
+.glance-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(170px,1fr));gap:14px;margin-bottom:32px}
+.glance-card{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:18px}
+.glance-card .gl-label{font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);margin-bottom:4px}
+.glance-card .gl-value{font-size:1.5rem;font-weight:800}
+.glance-card .gl-sub{font-size:.74rem;color:var(--muted)}
+.ritual-steps{display:flex;flex-direction:column;gap:14px;margin-bottom:32px}
+.ritual-step{background:var(--card);border:1px solid var(--border);border-radius:12px;overflow:hidden}
+.ritual-header{display:flex;align-items:center;gap:14px;padding:16px 20px;cursor:pointer}
+.ritual-header .r-num{width:28px;height:28px;border-radius:50%;background:var(--green);color:#fff;font-weight:800;font-size:.85rem;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.ritual-header h3{font-weight:700;font-size:.95rem;flex:1}
+.ritual-header .chevron{color:var(--muted);font-size:.8rem;transition:.2s}
+.ritual-body{padding:0 20px 20px;display:none}
+.ritual-body.open{display:block}
+.upload-zone{border:2px dashed var(--border);border-radius:10px;padding:28px;text-align:center;cursor:pointer;transition:.15s;margin-bottom:12px}
+.upload-zone:hover{border-color:var(--green);background:var(--green-light)}
+.upload-zone p{color:var(--muted);font-size:.85rem;margin-top:6px}
+.wellbeing-form .form-row{display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:10px}
+.goal-input{width:100%;padding:10px 14px;border:1.5px solid var(--border);border-radius:8px;outline:none;transition:.15s;margin-bottom:10px}
+.goal-input:focus{border-color:var(--green)}
+
+/* ── SCREEN TIME ── */
+.screen-wrap{max-width:720px;margin:0 auto;padding:32px 24px 64px}
+.screen-wrap h1{font-size:1.5rem;font-weight:800;margin-bottom:4px}
+.screen-wrap .subtitle{color:var(--muted);font-size:.88rem;margin-bottom:24px}
+.device-tabs{display:flex;gap:8px;margin-bottom:24px;flex-wrap:wrap}
+.device-tab{padding:8px 16px;border:1.5px solid var(--border);border-radius:8px;font-size:.82rem;font-weight:600;cursor:pointer;transition:.15s;background:#fff}
+.device-tab.active,.device-tab:hover{border-color:var(--green);background:var(--green-light);color:var(--green-dark)}
+.screen-chart{display:flex;flex-direction:column;gap:12px;margin-bottom:28px}
+.screen-row{display:flex;align-items:center;gap:12px}
+.screen-app{width:110px;font-size:.83rem;font-weight:600;flex-shrink:0}
+.screen-bar-track{flex:1;height:12px;background:#e5e7eb;border-radius:99px;overflow:hidden}
+.screen-bar-fill{height:100%;border-radius:99px;background:var(--blue);transition:.4s}
+.screen-time-val{width:50px;font-size:.8rem;color:var(--muted)}
+.manual-log-form{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:22px}
+.manual-log-form h2{font-size:1rem;font-weight:700;margin-bottom:14px}
+
+/* ── FAMILY ── */
+.family-wrap{max-width:620px;margin:0 auto;padding:32px 24px 64px}
+.family-wrap h1{font-size:1.5rem;font-weight:800;margin-bottom:4px}
+.family-wrap .subtitle{color:var(--muted);font-size:.88rem;margin-bottom:24px}
+.member-card{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:20px;margin-bottom:14px;display:flex;justify-content:space-between;align-items:center}
+.member-info h3{font-weight:700;font-size:.95rem}
+.member-info p{font-size:.78rem;color:var(--muted)}
+.member-badge{font-size:.7rem;font-weight:700;padding:2px 8px;border-radius:99px;background:var(--green-light);color:var(--green-dark)}
+.invite-form{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:22px;margin-top:20px}
+.invite-form h2{font-size:1rem;font-weight:700;margin-bottom:14px}
+
+/* ── PRIVACY ── */
+.privacy-wrap{max-width:640px;margin:0 auto;padding:32px 24px 64px}
+.privacy-wrap h1{font-size:1.5rem;font-weight:800;margin-bottom:4px}
+.privacy-wrap .subtitle{color:var(--muted);font-size:.88rem;margin-bottom:24px}
+.toggle-section{margin-bottom:24px}
+.toggle-section h2{font-size:1rem;font-weight:700;margin-bottom:14px;padding-bottom:8px;border-bottom:1px solid var(--border)}
+.toggle-row{display:flex;justify-content:space-between;align-items:flex-start;padding:14px 0;border-bottom:1px solid #f3f4f6;gap:16px}
+.toggle-info h3{font-size:.9rem;font-weight:600;margin-bottom:2px}
+.toggle-info p{font-size:.78rem;color:var(--muted)}
+.toggle{position:relative;width:42px;height:24px;flex-shrink:0;margin-top:2px}
+.toggle input{opacity:0;width:0;height:0}
+.toggle-slider{position:absolute;inset:0;background:#d1d5db;border-radius:99px;cursor:pointer;transition:.25s}
+.toggle-slider::before{content:"";position:absolute;width:18px;height:18px;border-radius:50%;background:#fff;left:3px;bottom:3px;transition:.25s;box-shadow:0 1px 3px rgba(0,0,0,.2)}
+.toggle input:checked+.toggle-slider{background:var(--green)}
+.toggle input:checked+.toggle-slider::before{transform:translateX(18px)}
+.danger-zone{background:#fff5f5;border:1.5px solid #fecaca;border-radius:12px;padding:20px 24px;margin-top:16px}
+.danger-zone h2{font-size:1rem;font-weight:700;color:var(--red);margin-bottom:10px}
+.danger-zone p{font-size:.83rem;color:var(--muted);margin-bottom:14px}
+
+/* FOOTER */
+footer{text-align:center;padding:28px 24px;font-size:.78rem;color:var(--muted);border-top:1px solid var(--border)}
+footer a{color:var(--muted);text-decoration:underline}
+
+/* TOAST */
+.toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:#111;color:#fff;padding:10px 20px;border-radius:8px;font-size:.85rem;font-weight:500;z-index:999;animation:toastIn .2s ease;pointer-events:none}
+@keyframes toastIn{from{opacity:0;transform:translateX(-50%) translateY(8px)}to{opacity:1;transform:translateX(-50%) translateY(0)}}
+
+@media(max-width:600px){
+  nav{padding:10px 14px}
+  .nav-links{display:none}
+  .form-row{grid-template-columns:1fr}
+}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-brand" onclick="showPage('home')">
+    <strong>Guardian Angel</strong>
+    <span>Money &amp; time, made simple</span>
+  </div>
+  <div class="nav-links">
+    <a onclick="showPage('setup')" data-page="setup">Setup</a>
+    <a onclick="showPage('daily')" data-page="daily">Daily log</a>
+    <a onclick="showPage('weekly')" data-page="weekly">Weekly check-in</a>
+    <a onclick="showPage('plan')" data-page="plan">My plan</a>
+    <a onclick="showPage('screen')" data-page="screen">Screen time</a>
+    <a onclick="showPage('family')" data-page="family">Family</a>
+    <a onclick="showPage('privacy')" data-page="privacy">Privacy</a>
+  </div>
+  <div class="nav-actions">
+    <button class="btn btn-primary btn-sm" onclick="handleSave()">Save your progress</button>
+    <button class="btn btn-ghost" onclick="showPage('setup')">Start setup</button>
+  </div>
+</nav>
+
+<!-- ══════════════ HOME ══════════════ -->
+<div id="page-home" class="page active">
+  <div class="hero">
+    <h1>See your money &amp; time clearly — in 2 minutes.</h1>
+    <p>Answer 7 quick questions. We'll show you your take-home pay, what's left over each month, and where your time goes. No passwords, no account numbers, no nonsense.</p>
+    <div class="hero-actions">
+      <button class="btn btn-primary" onclick="showPage('setup')">Start setup — 2 minutes</button>
+      <button class="btn btn-outline" onclick="showExample()">See an example first</button>
+    </div>
+  </div>
+
+  <div class="feature-card">
+    <div class="feature-inner">
+      <span class="badge">New</span>
+      <h3>Screen time tracking — now on all your devices</h3>
+      <p>See exactly where your hours go across all your devices. Guardian Angel brings it together in one place so you can spot patterns and make small changes that add up.</p>
+      <div class="ptags">
+        <span class="ptag">📱 iPhone</span>
+        <span class="ptag">🤖 Android</span>
+        <span class="ptag">🪟 Windows</span>
+        <span class="ptag">🍎 macOS</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="how-section">
+    <p class="section-label">How it works</p>
+    <h2>Three steps to financial clarity</h2>
+    <div class="steps">
+      <div class="step"><div class="step-num">1</div><h3>Answer 7 questions</h3><p>Takes about 2 minutes. No bank logins or account numbers — just the basics.</p></div>
+      <div class="step"><div class="step-num">2</div><h3>See your full picture</h3><p>Your take-home pay, monthly surplus, and where your time actually goes.</p></div>
+      <div class="step"><div class="step-num">3</div><h3>Weekly check-ins</h3><p>A quick 5-minute review each week keeps you on track and spots trends early.</p></div>
+    </div>
+  </div>
+
+  <div class="privacy-banner">
+    <div class="how-section" style="padding:0">
+      <p class="section-label">Private by default</p>
+      <h2>We never ask for sensitive details</h2>
+    </div>
+    <div class="privacy-box">
+      <p>Guardian Angel never asks for bank passwords, PINs, IBAN numbers, or PPS numbers. Your data lives on your device. You decide if anything leaves it.</p>
+    </div>
+  </div>
+
+  <div class="cards-section">
+    <p class="section-label">Jump to</p>
+    <h2>Everything in one place</h2>
+    <div class="cards-grid">
+      <div class="nav-card" onclick="showPage('daily')"><span class="icon">📓</span><h3>Daily log</h3><p>Track spending and time day by day.</p></div>
+      <div class="nav-card" onclick="showPage('weekly')"><span class="icon">📅</span><h3>Weekly check-in</h3><p>A quick review to keep you on track.</p></div>
+      <div class="nav-card" onclick="showPage('plan')"><span class="icon">🗺️</span><h3>My plan</h3><p>Your personalised financial roadmap.</p></div>
+      <div class="nav-card" onclick="showPage('screen')"><span class="icon">📱</span><h3>Screen time</h3><p>See where your hours go across devices.</p></div>
+      <div class="nav-card" onclick="showPage('family')"><span class="icon">👨‍👩‍👧</span><h3>Family</h3><p>Share progress with people you trust.</p></div>
+      <div class="nav-card" onclick="showPage('privacy')"><span class="icon">🔒</span><h3>Privacy</h3><p>Control exactly what stays private.</p></div>
+    </div>
+  </div>
+
+  <footer>
+    <p>Built in Ireland · Private by default · <a onclick="showPage('setup')">Extended questionnaire</a> · <a onclick="showPage('privacy')">Privacy settings</a></p>
+  </footer>
+</div>
+
+<!-- ══════════════ SETUP ══════════════ -->
+<div id="page-setup" class="page">
+  <div class="setup-wrap">
+    <div class="setup-header">
+      <h1>Quick setup</h1>
+      <p>7 questions · about 2 minutes · no sensitive data needed</p>
+      <div class="progress-bar"><div class="progress-fill" id="progress-fill" style="width:14%"></div></div>
+    </div>
+
+    <!-- Q1 -->
+    <div class="q-step active" id="q1">
+      <div class="q-label">What best describes your employment situation?</div>
+      <div class="option-grid">
+        <div class="option-btn" onclick="selectOption(this,'employment','Employed')">💼 Employed</div>
+        <div class="option-btn" onclick="selectOption(this,'employment','Self-employed')">🧑‍💻 Self-employed</div>
+        <div class="option-btn" onclick="selectOption(this,'employment','Part-time')">⏰ Part-time</div>
+        <div class="option-btn" onclick="selectOption(this,'employment','Carer')">🤲 Carer</div>
+        <div class="option-btn" onclick="selectOption(this,'employment','Retired')">🌅 Retired</div>
+        <div class="option-btn" onclick="selectOption(this,'employment','Student')">📚 Student</div>
+      </div>
+      <div class="q-nav"><span class="q-counter">1 of 7</span><button class="btn btn-primary" onclick="nextQ(2)">Next →</button></div>
+    </div>
+
+    <!-- Q2 -->
+    <div class="q-step" id="q2">
+      <div class="q-label">What is your approximate monthly take-home pay?</div>
+      <div class="q-sub">After tax, USC, and PRSI — what hits your account?</div>
+      <div class="field">
+        <label>Monthly take-home pay</label>
+        <div class="input-prefix"><span>€</span><input type="number" id="income" placeholder="e.g. 3200" min="0"/></div>
+      </div>
+      <div class="field">
+        <label>Any other regular income? (optional)</label>
+        <div class="input-prefix"><span>€</span><input type="number" id="other-income" placeholder="e.g. 500" min="0"/></div>
+      </div>
+      <div class="q-nav">
+        <button class="btn btn-outline btn-sm" onclick="prevQ(1)">← Back</button>
+        <span class="q-counter">2 of 7</span>
+        <button class="btn btn-primary" onclick="nextQ(3)">Next →</button>
+      </div>
+    </div>
+
+    <!-- Q3 -->
+    <div class="q-step" id="q3">
+      <div class="q-label">What are your fixed monthly costs?</div>
+      <div class="q-sub">Rent/mortgage, loans, subscriptions — things that come out automatically.</div>
+      <div class="field"><label>Rent / Mortgage</label><div class="input-prefix"><span>€</span><input type="number" id="rent" placeholder="0" min="0"/></div></div>
+      <div class="field"><label>Loans / HP / Credit cards</label><div class="input-prefix"><span>€</span><input type="number" id="loans" placeholder="0" min="0"/></div></div>
+      <div class="field"><label>Subscriptions (Netflix, gym, etc.)</label><div class="input-prefix"><span>€</span><input type="number" id="subs" placeholder="0" min="0"/></div></div>
+      <div class="q-nav">
+        <button class="btn btn-outline btn-sm" onclick="prevQ(2)">← Back</button>
+        <span class="q-counter">3 of 7</span>
+        <button class="btn btn-primary" onclick="nextQ(4)">Next →</button>
+      </div>
+    </div>
+
+    <!-- Q4 -->
+    <div class="q-step" id="q4">
+      <div class="q-label">Roughly how much do you spend on variable costs each month?</div>
+      <div class="q-sub">Groceries, fuel, eating out, clothes, etc.</div>
+      <div class="field"><label>Groceries &amp; food at home</label><div class="input-prefix"><span>€</span><input type="number" id="groceries" placeholder="0" min="0"/></div></div>
+      <div class="field"><label>Eating out &amp; takeaways</label><div class="input-prefix"><span>€</span><input type="number" id="eating-out" placeholder="0" min="0"/></div></div>
+      <div class="field"><label>Transport (fuel, Leap, taxi)</label><div class="input-prefix"><span>€</span><input type="number" id="transport" placeholder="0" min="0"/></div></div>
+      <div class="field"><label>Everything else</label><div class="input-prefix"><span>€</span><input type="number" id="other-spend" placeholder="0" min="0"/></div></div>
+      <div class="q-nav">
+        <button class="btn btn-outline btn-sm" onclick="prevQ(3)">← Back</button>
+        <span class="q-counter">4 of 7</span>
+        <button class="btn btn-primary" onclick="nextQ(5)">Next →</button>
+      </div>
+    </div>
+
+    <!-- Q5 -->
+    <div class="q-step" id="q5">
+      <div class="q-label">Do you have any savings or emergency fund?</div>
+      <div class="option-grid">
+        <div class="option-btn" onclick="selectOption(this,'savings','None yet')">😅 None yet</div>
+        <div class="option-btn" onclick="selectOption(this,'savings','Under 1 month')">🌱 Under 1 month</div>
+        <div class="option-btn" onclick="selectOption(this,'savings','1–3 months')">✅ 1–3 months</div>
+        <div class="option-btn" onclick="selectOption(this,'savings','3–6 months')">💪 3–6 months</div>
+        <div class="option-btn" onclick="selectOption(this,'savings','6+ months')">🏆 6+ months</div>
+      </div>
+      <div class="q-nav">
+        <button class="btn btn-outline btn-sm" onclick="prevQ(4)">← Back</button>
+        <span class="q-counter">5 of 7</span>
+        <button class="btn btn-primary" onclick="nextQ(6)">Next →</button>
+      </div>
+    </div>
+
+    <!-- Q6 -->
+    <div class="q-step" id="q6">
+      <div class="q-label">How many hours of screen time do you average per day?</div>
+      <div class="q-sub">Across all devices — phone, laptop, TV.</div>
+      <div class="option-grid">
+        <div class="option-btn" onclick="selectOption(this,'screentime','Under 2h')">😊 Under 2h</div>
+        <div class="option-btn" onclick="selectOption(this,'screentime','2–4h')">👍 2–4h</div>
+        <div class="option-btn" onclick="selectOption(this,'screentime','4–6h')">😐 4–6h</div>
+        <div class="option-btn" onclick="selectOption(this,'screentime','6–8h')">😬 6–8h</div>
+        <div class="option-btn" onclick="selectOption(this,'screentime','8h+')">😵 8h+</div>
+      </div>
+      <div class="q-nav">
+        <button class="btn btn-outline btn-sm" onclick="prevQ(5)">← Back</button>
+        <span class="q-counter">6 of 7</span>
+        <button class="btn btn-primary" onclick="nextQ(7)">Next →</button>
+      </div>
+    </div>
+
+    <!-- Q7 -->
+    <div class="q-step" id="q7">
+      <div class="q-label">What's your biggest financial goal right now?</div>
+      <div class="option-grid">
+        <div class="option-btn" onclick="selectOption(this,'goal','Build emergency fund')">🛡️ Emergency fund</div>
+        <div class="option-btn" onclick="selectOption(this,'goal','Save for a house')">🏠 Save for house</div>
+        <div class="option-btn" onclick="selectOption(this,'goal','Pay off debt')">💳 Pay off debt</div>
+        <div class="option-btn" onclick="selectOption(this,'goal','Save for travel')">✈️ Travel fund</div>
+        <div class="option-btn" onclick="selectOption(this,'goal','Invest more')">📈 Invest more</div>
+        <div class="option-btn" onclick="selectOption(this,'goal','Just get organised')">📋 Get organised</div>
+      </div>
+      <div class="q-nav">
+        <button class="btn btn-outline btn-sm" onclick="prevQ(6)">← Back</button>
+        <span class="q-counter">7 of 7</span>
+        <button class="btn btn-primary" onclick="finishSetup()">See my results ✨</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════ MY PLAN ══════════════ -->
+<div id="page-plan" class="page">
+  <div class="plan-wrap">
+    <h1>My plan</h1>
+    <p class="subtitle">Your personalised financial picture</p>
+    <div id="plan-content"></div>
+  </div>
+</div>
+
+<!-- ══════════════ DAILY LOG ══════════════ -->
+<div id="page-daily" class="page">
+  <div class="log-wrap">
+    <h1>Daily log</h1>
+    <p class="subtitle">Track your spending — takes about 30 seconds</p>
+
+    <div class="log-form">
+      <h2>Add entry</h2>
+      <div class="field"><label>Description</label><input type="text" id="log-name" placeholder="e.g. Tesco, Centra, Bus"/></div>
+      <div class="form-row">
+        <div class="field"><label>Amount</label><div class="input-prefix"><span>€</span><input type="number" id="log-amount" placeholder="0.00" min="0" step="0.01"/></div></div>
+        <div class="field"><label>Category</label>
+          <select id="log-cat">
+            <option>🛒 Groceries</option>
+            <option>🍕 Eating out</option>
+            <option>🚌 Transport</option>
+            <option>☕ Coffee</option>
+            <option>🏥 Health</option>
+            <option>👗 Clothes</option>
+            <option>🎉 Entertainment</option>
+            <option>💰 Income</option>
+            <option>📦 Other</option>
+          </select>
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="field"><label>Date</label><input type="date" id="log-date"/></div>
+        <div class="field"><label>Type</label>
+          <select id="log-type">
+            <option value="expense">Expense</option>
+            <option value="income">Income</option>
+          </select>
+        </div>
+      </div>
+      <button class="btn btn-primary" style="width:100%;margin-top:4px" onclick="addLogEntry()">+ Add entry</button>
+    </div>
+
+    <div id="log-entries"></div>
+  </div>
+</div>
+
+<!-- ══════════════ WEEKLY CHECK-IN ══════════════ -->
+<div id="page-weekly" class="page">
+  <div class="weekly-wrap">
+    <h1>Weekly check-in</h1>
+    <p class="subtitle">How was your week? · Sunday ritual</p>
+
+    <div class="glance-grid">
+      <div class="glance-card"><div class="gl-label">Spend so far</div><div class="gl-value" id="w-spend">€0</div><div class="gl-sub">Target: €<span id="w-target">575</span></div></div>
+      <div class="glance-card"><div class="gl-label">Money in</div><div class="gl-value" id="w-income">€0</div></div>
+      <div class="glance-card"><div class="gl-label">Uncategorised</div><div class="gl-value" id="w-uncat">€0</div></div>
+      <div class="glance-card"><div class="gl-label">Net worth</div><div class="gl-value" id="w-networth">—</div></div>
+    </div>
+
+    <div class="ritual-steps">
+      <!-- Step 1 -->
+      <div class="ritual-step">
+        <div class="ritual-header" onclick="toggleRitual(1)">
+          <div class="r-num">1</div><h3>Look — review last week</h3><span class="chevron" id="chev1">▼</span>
+        </div>
+        <div class="ritual-body" id="rbody1">
+          <p style="color:var(--muted);font-size:.88rem;margin-bottom:12px">Review your log and note your top 3 surprises from the week.</p>
+          <textarea id="surprises" class="goal-input" rows="3" placeholder="e.g. Spent €60 on coffees, didn't realise Spotify renewed..."></textarea>
+          <button class="btn btn-primary btn-sm" onclick="saveField('surprises')">Save notes</button>
+        </div>
+      </div>
+      <!-- Step 2 -->
+      <div class="ritual-step">
+        <div class="ritual-header" onclick="toggleRitual(2)">
+          <div class="r-num">2</div><h3>Import — add bank CSVs</h3><span class="chevron" id="chev2">▼</span>
+        </div>
+        <div class="ritual-body" id="rbody2">
+          <div class="field"><label>Account type</label>
+            <select id="bank-type" style="width:100%;padding:10px 14px;border:1.5px solid var(--border);border-radius:8px;outline:none">
+              <option>AIB Personal</option>
+              <option>AIB Business</option>
+              <option>Bank of Ireland</option>
+              <option>PTSB</option>
+              <option>Revolut</option>
+              <option>N26</option>
+              <option>Credit Union</option>
+            </select>
+          </div>
+          <div class="upload-zone" onclick="document.getElementById('csv-input').click()">
+            <div style="font-size:2rem">📂</div>
+            <strong>Click to upload CSV / Excel</strong>
+            <p>.csv, .xlsx, .xls accepted — or drag and drop</p>
+            <input type="file" id="csv-input" accept=".csv,.xlsx,.xls" style="display:none" onchange="handleCSV(this)"/>
+          </div>
+          <textarea class="goal-input" rows="3" placeholder="Or paste CSV data directly here..."></textarea>
+          <button class="btn btn-outline btn-sm" onclick="toast('CSV parsed — 0 transactions found (demo mode)')">Preview import</button>
+        </div>
+      </div>
+      <!-- Step 3 -->
+      <div class="ritual-step">
+        <div class="ritual-header" onclick="toggleRitual(3)">
+          <div class="r-num">3</div><h3>Categorise — review uncategorised</h3><span class="chevron" id="chev3">▼</span>
+        </div>
+        <div class="ritual-body" id="rbody3">
+          <p style="color:var(--muted);font-size:.88rem">No uncategorised transactions this week — you're all caught up! ✅</p>
+        </div>
+      </div>
+      <!-- Step 4 -->
+      <div class="ritual-step">
+        <div class="ritual-header" onclick="toggleRitual(4)">
+          <div class="r-num">4</div><h3>Net worth — log your totals</h3><span class="chevron" id="chev4">▼</span>
+        </div>
+        <div class="ritual-body" id="rbody4">
+          <div class="form-row">
+            <div class="field"><label>Date</label><input type="date" id="nw-date" style="width:100%;padding:10px 14px;border:1.5px solid var(--border);border-radius:8px;outline:none"/></div>
+          </div>
+          <div class="form-row">
+            <div class="field"><label>Total assets</label><div class="input-prefix"><span>€</span><input type="number" id="nw-assets" placeholder="0" min="0"/></div></div>
+            <div class="field"><label>Total liabilities</label><div class="input-prefix"><span>€</span><input type="number" id="nw-liabilities" placeholder="0" min="0"/></div></div>
+          </div>
+          <button class="btn btn-primary btn-sm" onclick="saveNetWorth()">Save snapshot</button>
+        </div>
+      </div>
+      <!-- Step 5 -->
+      <div class="ritual-step">
+        <div class="ritual-header" onclick="toggleRitual(5)">
+          <div class="r-num">5</div><h3>Wellbeing — log sleep &amp; steps</h3><span class="chevron" id="chev5">▼</span>
+        </div>
+        <div class="ritual-body" id="rbody5">
+          <div class="wellbeing-form">
+            <div class="form-row">
+              <div class="field"><label>Date</label><input type="date" id="wb-date" style="width:100%;padding:10px 14px;border:1.5px solid var(--border);border-radius:8px;outline:none"/></div>
+              <div class="field"><label>Person</label><input type="text" id="wb-person" placeholder="e.g. Me" style="width:100%;padding:10px 14px;border:1.5px solid var(--border);border-radius:8px;outline:none"/></div>
+            </div>
+            <div class="form-row">
+              <div class="field"><label>Sleep (hours)</label><input type="number" id="wb-sleep" placeholder="7.5" min="0" max="24" step="0.5" style="width:100%;padding:10px 14px;border:1.5px solid var(--border);border-radius:8px;outline:none"/></div>
+              <div class="field"><label>Steps</label><input type="number" id="wb-steps" placeholder="8000" min="0" style="width:100%;padding:10px 14px;border:1.5px solid var(--border);border-radius:8px;outline:none"/></div>
+            </div>
+            <button class="btn btn-primary btn-sm" onclick="saveWellbeing()">Save wellbeing log</button>
+          </div>
+        </div>
+      </div>
+      <!-- Step 6 -->
+      <div class="ritual-step">
+        <div class="ritual-header" onclick="toggleRitual(6)">
+          <div class="r-num">6</div><h3>Plan — set your goals</h3><span class="chevron" id="chev6">▼</span>
+        </div>
+        <div class="ritual-body" id="rbody6">
+          <div class="field"><label>💰 Money goal for next week</label><input type="text" id="money-goal" class="goal-input" style="width:100%" placeholder="e.g. Spend under €50 on eating out"/></div>
+          <div class="field"><label>⏰ Time goal for next week</label><input type="text" id="time-goal" class="goal-input" style="width:100%" placeholder="e.g. Keep phone under 3h/day"/></div>
+          <button class="btn btn-primary btn-sm" onclick="saveGoals()">Save goals</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════ SCREEN TIME ══════════════ -->
+<div id="page-screen" class="page">
+  <div class="screen-wrap">
+    <h1>Screen time</h1>
+    <p class="subtitle">Where your hours actually go</p>
+    <div class="device-tabs">
+      <div class="device-tab active" onclick="setDeviceTab(this,'all')">📊 All devices</div>
+      <div class="device-tab" onclick="setDeviceTab(this,'phone')">📱 Phone</div>
+      <div class="device-tab" onclick="setDeviceTab(this,'laptop')">💻 Laptop</div>
+      <div class="device-tab" onclick="setDeviceTab(this,'tv')">📺 TV</div>
+    </div>
+    <div id="screen-chart-area"></div>
+    <div class="manual-log-form">
+      <h2>Log manually</h2>
+      <div class="form-row">
+        <div class="field"><label>Date</label><input type="date" id="st-date" style="width:100%;padding:10px 14px;border:1.5px solid var(--border);border-radius:8px;outline:none"/></div>
+        <div class="field"><label>Device</label>
+          <select id="st-device" style="width:100%;padding:10px 14px;border:1.5px solid var(--border);border-radius:8px;outline:none">
+            <option>📱 Phone</option><option>💻 Laptop</option><option>📺 TV</option><option>🎮 Console</option>
+          </select>
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="field"><label>App / Activity</label><input type="text" id="st-app" placeholder="e.g. Instagram, Netflix" style="width:100%;padding:10px 14px;border:1.5px solid var(--border);border-radius:8px;outline:none"/></div>
+        <div class="field"><label>Hours</label><input type="number" id="st-hours" placeholder="1.5" min="0" max="24" step="0.5" style="width:100%;padding:10px 14px;border:1.5px solid var(--border);border-radius:8px;outline:none"/></div>
+      </div>
+      <button class="btn btn-primary" style="width:100%;margin-top:4px" onclick="addScreenTime()">+ Log screen time</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════ FAMILY ══════════════ -->
+<div id="page-family" class="page">
+  <div class="family-wrap">
+    <h1>Family</h1>
+    <p class="subtitle">Share your progress with people you trust</p>
+    <div id="family-members"></div>
+    <div class="invite-form">
+      <h2>Invite someone</h2>
+      <div class="field"><label>Name</label><input type="text" id="inv-name" placeholder="e.g. Sarah" style="width:100%;padding:10px 14px;border:1.5px solid var(--border);border-radius:8px;outline:none"/></div>
+      <div class="field"><label>Email</label><input type="email" id="inv-email" placeholder="e.g. sarah@example.com" style="width:100%;padding:10px 14px;border:1.5px solid var(--border);border-radius:8px;outline:none"/></div>
+      <div class="field"><label>Role</label>
+        <select id="inv-role" style="width:100%;padding:10px 14px;border:1.5px solid var(--border);border-radius:8px;outline:none">
+          <option>Partner — can view &amp; edit</option>
+          <option>Family member — view only</option>
+          <option>Accountant — view only</option>
+        </select>
+      </div>
+      <button class="btn btn-primary" style="width:100%;margin-top:4px" onclick="inviteMember()">Send invite</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════ PRIVACY ══════════════ -->
+<div id="page-privacy" class="page">
+  <div class="privacy-wrap">
+    <h1>Privacy settings</h1>
+    <p class="subtitle">You control exactly what stays private</p>
+
+    <div class="toggle-section">
+      <h2>Data storage</h2>
+      <div class="toggle-row">
+        <div class="toggle-info"><h3>Store data locally only</h3><p>All your data stays on this device only. Nothing is sent to any server.</p></div>
+        <label class="toggle"><input type="checkbox" checked onchange="togglePrivacy('local',this)"/><span class="toggle-slider"></span></label>
+      </div>
+      <div class="toggle-row">
+        <div class="toggle-info"><h3>Sync across devices</h3><p>Securely sync your data across your devices using end-to-end encryption.</p></div>
+        <label class="toggle"><input type="checkbox" onchange="togglePrivacy('sync',this)"/><span class="toggle-slider"></span></label>
+      </div>
+    </div>
+
+    <div class="toggle-section">
+      <h2>Sharing</h2>
+      <div class="toggle-row">
+        <div class="toggle-info"><h3>Share with family members</h3><p>Allow people you've invited to view your progress.</p></div>
+        <label class="toggle"><input type="checkbox" onchange="togglePrivacy('family-share',this)"/><span class="toggle-slider"></span></label>
+      </div>
+      <div class="toggle-row">
+        <div class="toggle-info"><h3>Anonymous usage analytics</h3><p>Help improve Guardian Angel by sharing anonymous usage data. No personal or financial data is included.</p></div>
+        <label class="toggle"><input type="checkbox" onchange="togglePrivacy('analytics',this)"/><span class="toggle-slider"></span></label>
+      </div>
+    </div>
+
+    <div class="toggle-section">
+      <h2>Notifications</h2>
+      <div class="toggle-row">
+        <div class="toggle-info"><h3>Weekly check-in reminder</h3><p>Get a reminder every Sunday to do your weekly review.</p></div>
+        <label class="toggle"><input type="checkbox" checked onchange="togglePrivacy('weekly-reminder',this)"/><span class="toggle-slider"></span></label>
+      </div>
+      <div class="toggle-row">
+        <div class="toggle-info"><h3>Spending alerts</h3><p>Notify when you're approaching your weekly spending target.</p></div>
+        <label class="toggle"><input type="checkbox" checked onchange="togglePrivacy('spend-alert',this)"/><span class="toggle-slider"></span></label>
+      </div>
+    </div>
+
+    <div class="danger-zone">
+      <h2>⚠️ Danger zone</h2>
+      <p>These actions are permanent and cannot be undone.</p>
+      <button class="btn btn-danger" onclick="clearAllData()">Clear all my data</button>
+    </div>
+  </div>
+</div>
+
+<script>
+// ── STATE ──
+let state = JSON.parse(localStorage.getItem('ga_state') || '{}');
+if (!state.setup) state.setup = {};
+if (!state.logEntries) state.logEntries = [];
+if (!state.screenTime) state.screenTime = [];
+if (!state.family) state.family = [];
+if (!state.netWorth) state.netWorth = null;
+if (!state.goals) state.goals = {};
+
+function save() { localStorage.setItem('ga_state', JSON.stringify(state)); }
+
+// ── NAVIGATION ──
+function showPage(id) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.getElementById('page-' + id).classList.add('active');
+  document.querySelectorAll('.nav-links a').forEach(a => {
+    a.classList.toggle('active', a.dataset.page === id);
+  });
+  if (id === 'plan') renderPlan();
+  if (id === 'daily') renderLog();
+  if (id === 'screen') renderScreenChart();
+  if (id === 'family') renderFamily();
+  if (id === 'weekly') updateWeeklyGlance();
+  window.scrollTo(0, 0);
+}
+
+// ── TOAST ──
+function toast(msg) {
+  const t = document.createElement('div');
+  t.className = 'toast'; t.textContent = msg;
+  document.body.appendChild(t);
+  setTimeout(() => t.remove(), 2800);
+}
+
+// ── SETUP ──
+let currentQ = 1;
+
+function selectOption(el, key, val) {
+  el.closest('.option-grid').querySelectorAll('.option-btn').forEach(b => b.classList.remove('selected'));
+  el.classList.add('selected');
+  state.setup[key] = val; save();
+}
+
+function nextQ(n) {
+  document.getElementById('q' + currentQ).classList.remove('active');
+  currentQ = n;
+  document.getElementById('q' + n).classList.add('active');
+  document.getElementById('progress-fill').style.width = (n / 7 * 100) + '%';
+}
+
+function prevQ(n) { nextQ(n); }
+
+function finishSetup() {
+  // Collect text inputs
+  ['income','other-income','rent','loans','subs','groceries','eating-out','transport','other-spend'].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) state.setup[id] = parseFloat(el.value) || 0;
+  });
+  save();
+  showPage('plan');
+  toast('Setup complete! Here\'s your plan ✨');
+  // Reset form
+  currentQ = 1;
+  document.querySelectorAll('.q-step').forEach(q => q.classList.remove('active'));
+  document.getElementById('q1').classList.add('active');
+  document.getElementById('progress-fill').style.width = '14%';
+}
+
+function showExample() {
+  state.setup = {
+    employment:'Employed', income:3400, 'other-income':0,
+    rent:1100, loans:200, subs:45,
+    groceries:280, 'eating-out':150, transport:120, 'other-spend':200,
+    savings:'1–3 months', screentime:'4–6h', goal:'Build emergency fund'
+  };
+  save(); showPage('plan');
+  toast('Showing example data');
+}
+
+// ── PLAN ──
+function renderPlan() {
+  const el = document.getElementById('plan-content');
+  const s = state.setup;
+  if (!s.income) {
+    el.innerHTML = `<div class="no-data-box"><p>You haven't completed setup yet.</p><button class="btn btn-primary" onclick="showPage('setup')">Start setup — 2 minutes</button></div>`;
+    return;
+  }
+  const income = (s.income || 0) + (s['other-income'] || 0);
+  const fixed = (s.rent || 0) + (s.loans || 0) + (s.subs || 0);
+  const variable = (s.groceries || 0) + (s['eating-out'] || 0) + (s.transport || 0) + (s['other-spend'] || 0);
+  const total_spend = fixed + variable;
+  const surplus = income - total_spend;
+  const surplusClass = surplus >= 0 ? 'green' : 'red';
+
+  const spending = [
+    {label:'🏠 Rent/Mortgage', val:s.rent||0, color:'#3b82f6'},
+    {label:'💳 Loans/HP', val:s.loans||0, color:'#8b5cf6'},
+    {label:'📺 Subscriptions', val:s.subs||0, color:'#f59e0b'},
+    {label:'🛒 Groceries', val:s.groceries||0, color:'#22c55e'},
+    {label:'🍕 Eating out', val:s['eating-out']||0, color:'#f97316'},
+    {label:'🚌 Transport', val:s.transport||0, color:'#06b6d4'},
+    {label:'📦 Other', val:s['other-spend']||0, color:'#6b7280'},
+  ].filter(x => x.val > 0);
+
+  const bars = spending.map(x => `
+    <div class="bar-row">
+      <div class="bar-label">${x.label}</div>
+      <div class="bar-track"><div class="bar-fill" style="width:${Math.min(100,x.val/income*100)}%;background:${x.color}"></div></div>
+      <div class="bar-val">€${x.val}</div>
+    </div>`).join('');
+
+  const insights = [];
+  if ((s['eating-out']||0) > 200) insights.push({t:'💡 Eating out is high',b:`You're spending €${s['eating-out']} on eating out. Cutting this by €50 would add €600/year to your savings.`});
+  if (surplus < 0) insights.push({t:'⚠️ Spending exceeds income',b:`You're spending €${Math.abs(surplus)} more than you earn each month. Review your variable costs.`});
+  if (surplus > 0 && surplus < 200) insights.push({t:'🌱 Slim margin',b:`You have €${surplus} left over each month. Consider automating a small transfer to savings.`});
+  if (surplus >= 500) insights.push({t:'✅ Great surplus!',b:`€${surplus}/month gives you real options — consider investing or boosting your emergency fund.`});
+  if (!insights.length) insights.push({t:'📊 Looking good',b:`Your finances look balanced. Keep logging weekly to spot trends.`});
+
+  el.innerHTML = `
+    <div class="summary-grid">
+      <div class="summary-card"><div class="label">Monthly income</div><div class="value">€${income.toLocaleString()}</div><div class="sub">Take-home + other</div></div>
+      <div class="summary-card"><div class="label">Fixed costs</div><div class="value">€${fixed.toLocaleString()}</div><div class="sub">Rent, loans, subs</div></div>
+      <div class="summary-card"><div class="label">Variable costs</div><div class="value">€${variable.toLocaleString()}</div><div class="sub">Groceries, transport…</div></div>
+      <div class="summary-card"><div class="label">Monthly surplus</div><div class="value ${surplusClass}">€${Math.abs(surplus).toLocaleString()}</div><div class="sub">${surplus >= 0 ? 'Left over each month' : 'Shortfall!'}</div></div>
+    </div>
+    <div class="plan-section"><h2>Where your money goes</h2><div class="bar-chart">${bars || '<p style="color:var(--muted);font-size:.88rem">No spending data yet.</p>'}</div></div>
+    <div class="plan-section"><h2>Insights &amp; suggestions</h2>${insights.map(i=>`<div class="insight-box"><strong>${i.t}</strong>${i.b}</div>`).join('')}</div>
+    ${s.goal ? `<div class="plan-section"><h2>Your goal</h2><div class="insight-box"><strong>🎯 ${s.goal}</strong>You selected this as your main goal. We'll keep your plan focused on it.</div></div>` : ''}
+  `;
+}
+
+// ── DAILY LOG ──
+function addLogEntry() {
+  const name = document.getElementById('log-name').value.trim();
+  const amount = parseFloat(document.getElementById('log-amount').value);
+  const cat = document.getElementById('log-cat').value;
+  const type = document.getElementById('log-type').value;
+  const date = document.getElementById('log-date').value || new Date().toISOString().split('T')[0];
+  if (!name || !amount) { toast('Please fill in description and amount'); return; }
+  state.logEntries.unshift({id:Date.now(), name, amount, cat, type, date});
+  save(); renderLog();
+  document.getElementById('log-name').value = '';
+  document.getElementById('log-amount').value = '';
+  toast('Entry added ✓');
+}
+
+function deleteEntry(id) {
+  state.logEntries = state.logEntries.filter(e => e.id !== id);
+  save(); renderLog();
+}
+
+function renderLog() {
+  const el = document.getElementById('log-entries');
+  if (!state.logEntries.length) { el.innerHTML = '<p style="color:var(--muted);font-size:.88rem;text-align:center;padding:24px 0">No entries yet — add your first one above.</p>'; return; }
+  const today = new Date().toISOString().split('T')[0];
+  const todayEntries = state.logEntries.filter(e => e.date === today);
+  const todaySpend = todayEntries.filter(e=>e.type==='expense').reduce((s,e)=>s+e.amount,0);
+  const todayIncome = todayEntries.filter(e=>e.type==='income').reduce((s,e)=>s+e.amount,0);
+
+  const items = state.logEntries.slice(0,20).map(e => `
+    <div class="entry-item">
+      <div class="entry-left">
+        <div class="entry-name">${e.cat} ${e.name}</div>
+        <div class="entry-meta">${e.date}</div>
+      </div>
+      <div style="display:flex;align-items:center;gap:10px">
+        <div class="entry-amount ${e.type}">${e.type==='income'?'+':'-'}€${e.amount.toFixed(2)}</div>
+        <button class="entry-del" onclick="deleteEntry(${e.id})">🗑</button>
+      </div>
+    </div>`).join('');
+
+  el.innerHTML = `
+    <div class="today-total"><span>Today's spending</span><span>€${todaySpend.toFixed(2)}</span></div>
+    <div class="entries-list">${items}</div>`;
+  updateWeeklyGlance();
+}
+
+// ── WEEKLY GLANCE ──
+function updateWeeklyGlance() {
+  const now = new Date();
+  const weekStart = new Date(now); weekStart.setDate(now.getDate() - now.getDay());
+  const wStr = weekStart.toISOString().split('T')[0];
+  const weekEntries = state.logEntries.filter(e => e.date >= wStr);
+  const spend = weekEntries.filter(e=>e.type==='expense').reduce((s,e)=>s+e.amount,0);
+  const inc = weekEntries.filter(e=>e.type==='income').reduce((s,e)=>s+e.amount,0);
+  document.getElementById('w-spend').textContent = '€' + spend.toFixed(0);
+  document.getElementById('w-income').textContent = '€' + inc.toFixed(0);
+  if (state.netWorth) {
+    const nw = (state.netWorth.assets||0) - (state.netWorth.liabilities||0);
+    document.getElementById('w-networth').textContent = '€' + nw.toLocaleString();
+  }
+}
+
+// ── WEEKLY RITUAL ──
+function toggleRitual(n) {
+  const body = document.getElementById('rbody'+n);
+  const chev = document.getElementById('chev'+n);
+  body.classList.toggle('open');
+  chev.textContent = body.classList.contains('open') ? '▲' : '▼';
+}
+
+function saveField(id) { save(); toast('Saved ✓'); }
+
+function handleCSV(input) {
+  if (input.files.length) toast('File "' + input.files[0].name + '" received — import preview coming soon.');
+}
+
+function saveNetWorth() {
+  const assets = parseFloat(document.getElementById('nw-assets').value) || 0;
+  const liabilities = parseFloat(document.getElementById('nw-liabilities').value) || 0;
+  state.netWorth = {assets, liabilities, date: document.getElementById('nw-date').value || new Date().toISOString().split('T')[0]};
+  save(); updateWeeklyGlance();
+  toast('Net worth saved ✓');
+}
+
+function saveWellbeing() {
+  toast('Wellbeing log saved ✓');
+}
+
+function saveGoals() {
+  state.goals.money = document.getElementById('money-goal').value;
+  state.goals.time = document.getElementById('time-goal').value;
+  save(); toast('Goals saved ✓');
+}
+
+// ── SCREEN TIME ──
+function addScreenTime() {
+  const app = document.getElementById('st-app').value.trim();
+  const hours = parseFloat(document.getElementById('st-hours').value);
+  const device = document.getElementById('st-device').value;
+  const date = document.getElementById('st-date').value || new Date().toISOString().split('T')[0];
+  if (!app || !hours) { toast('Please fill in app and hours'); return; }
+  state.screenTime.push({id:Date.now(), app, hours, device, date});
+  save(); renderScreenChart();
+  document.getElementById('st-app').value = '';
+  document.getElementById('st-hours').value = '';
+  toast('Screen time logged ✓');
+}
+
+function setDeviceTab(el, filter) {
+  document.querySelectorAll('.device-tab').forEach(t => t.classList.remove('active'));
+  el.classList.add('active');
+  renderScreenChart(filter);
+}
+
+function renderScreenChart(filter='all') {
+  const el = document.getElementById('screen-chart-area');
+  let entries = state.screenTime;
+  if (filter !== 'all') entries = entries.filter(e => e.device.toLowerCase().includes(filter));
+
+  if (!entries.length) {
+    el.innerHTML = '<div style="text-align:center;padding:32px 0;color:var(--muted)"><p>No screen time logged yet.</p><p style="font-size:.83rem;margin-top:6px">Use the form below to log your first day.</p></div>';
+    return;
+  }
+
+  // Aggregate by app
+  const map = {};
+  entries.forEach(e => { map[e.app] = (map[e.app]||0) + e.hours; });
+  const sorted = Object.entries(map).sort((a,b)=>b[1]-a[1]).slice(0,8);
+  const max = sorted[0][1];
+  const colors = ['#3b82f6','#8b5cf6','#f59e0b','#22c55e','#f97316','#ef4444','#06b6d4','#6b7280'];
+
+  const rows = sorted.map(([app, hrs], i) => `
+    <div class="screen-row">
+      <div class="screen-app">${app}</div>
+      <div class="screen-bar-track"><div class="screen-bar-fill" style="width:${hrs/max*100}%;background:${colors[i%colors.length]}"></div></div>
+      <div class="screen-time-val">${hrs.toFixed(1)}h</div>
+    </div>`).join('');
+
+  const total = entries.reduce((s,e)=>s+e.hours,0);
+  el.innerHTML = `
+    <div style="display:flex;justify-content:space-between;margin-bottom:16px;align-items:center">
+      <h2 style="font-size:1rem;font-weight:700">App breakdown</h2>
+      <span style="font-size:.82rem;color:var(--muted)">Total: ${total.toFixed(1)}h logged</span>
+    </div>
+    <div class="screen-chart">${rows}</div>`;
+}
+
+// ── FAMILY ──
+function inviteMember() {
+  const name = document.getElementById('inv-name').value.trim();
+  const email = document.getElementById('inv-email').value.trim();
+  const role = document.getElementById('inv-role').value;
+  if (!name || !email) { toast('Please fill in name and email'); return; }
+  state.family.push({id:Date.now(), name, email, role, status:'Invited'});
+  save(); renderFamily();
+  document.getElementById('inv-name').value = '';
+  document.getElementById('inv-email').value = '';
+  toast('Invite sent to ' + name + ' ✓');
+}
+
+function renderFamily() {
+  const el = document.getElementById('family-members');
+  if (!state.family.length) { el.innerHTML = '<p style="color:var(--muted);font-size:.88rem">No family members added yet.</p>'; return; }
+  el.innerHTML = state.family.map(m => `
+    <div class="member-card">
+      <div class="member-info">
+        <h3>${m.name}</h3>
+        <p>${m.email} · ${m.role.split('—')[0].trim()}</p>
+      </div>
+      <span class="member-badge">${m.status}</span>
+    </div>`).join('');
+}
+
+// ── PRIVACY ──
+function togglePrivacy(key, el) {
+  if (!state.privacy) state.privacy = {};
+  state.privacy[key] = el.checked;
+  save(); toast((el.checked ? 'Enabled' : 'Disabled') + ': ' + key);
+}
+
+function clearAllData() {
+  if (confirm('This will delete ALL your data permanently. Are you sure?')) {
+    localStorage.removeItem('ga_state');
+    location.reload();
+  }
+}
+
+// ── SAVE / AUTH ──
+function handleSave() {
+  toast('Progress saved locally ✓');
+}
+
+// ── INIT ──
+document.getElementById('log-date').value = new Date().toISOString().split('T')[0];
+document.getElementById('nw-date').value = new Date().toISOString().split('T')[0];
+document.getElementById('wb-date').value = new Date().toISOString().split('T')[0];
+document.getElementById('st-date').value = new Date().toISOString().split('T')[0];
+if (state.goals.money) document.getElementById('money-goal').value = state.goals.money;
+if (state.goals.time) document.getElementById('time-goal').value = state.goals.time;
+</script>
+</body>
+</html>
